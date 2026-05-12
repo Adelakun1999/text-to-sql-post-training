@@ -42,7 +42,7 @@ dataset = load_dataset("json", data_files="datasets/sft/train.json", split="trai
 
 #convert message into text 
 
-def formaatting_prompts_fun(example):
+def format_example(example):
     text = tokenizer.apply_chat_template(
         example["messages"],
         tokenize = False
@@ -51,7 +51,35 @@ def formaatting_prompts_fun(example):
     return {"text" : text}
 
 
-dataset = dataset.map(formaatting_prompts_fun, remove_columns= dataset.column_names)
+dataset = dataset.map(format_example)
+
+#Tokenize dataset 
+
+def tokenize_function(example):
+
+    tokens = tokenizer(
+        example["text"],
+        truncation=True,
+        padding="max_length",
+        max_length=MAX_SEQ_LENGTH,
+    )
+
+    tokens["labels"] = tokens["input_ids"].copy()
+
+    return tokens
+
+
+dataset = dataset.map(tokenize_function , batched= False)
+
+dataset.set_format(
+    type= "torch",
+    columns=[
+        "input_ids",
+        "attention_mask",
+        "labels",
+    ],
+)
+
 
 
 trainer = SFTTrainer(
