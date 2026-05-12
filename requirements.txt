@@ -1,0 +1,17 @@
+unsloth
+torch
+transformers
+datasets
+trl
+peft
+accelerate
+bitsandbytes
+sentencepiece
+protobuf
+fastapi
+uvicorn
+pydantic
+scikit-learn
+pandas
+pyyaml
+sqlparse
