@@ -56,8 +56,8 @@ dataset = dataset.map(formaatting_prompts_fun, remove_columns= dataset.column_na
 
 trainer = SFTTrainer(
     model = model, 
+    processing_class=tokenizer,
     train_dataset= dataset,
-    dataset_text_field="text",
     max_seq_length=MAX_SEQ_LENGTH,
     args=TrainingArguments(
         output_dir=config["training"]["output_dir"],
